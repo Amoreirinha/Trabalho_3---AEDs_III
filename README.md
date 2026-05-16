@@ -93,13 +93,19 @@ Além da implementação, o trabalho inclui:
 ### Estrutura do Projeto
 ```text
 TRABALHO_3---AEDS_III/
-├── docs/
+├── docs/ 
+    └── results.csv
+├── instance/
+    ├── generate_graphs.py
+    ├── generator.py
+    └── requirements.txt
 ├── scr/
     ├── output/
     ├── algorithms.c
     ├── algorithms.h
     ├── base.c
     ├── Makefile 
+    ├── run_test.py
     └── exemplo.dat
 ├── Trabalho 3 - Informações/
     ├── descricao.pdf
@@ -112,7 +118,9 @@ TRABALHO_3---AEDS_III/
         ├── algorithms.h
         ├── base.c
         ├── Makefile 
-        └── exemplo.dat
+        ├── exemplo.dat
+        ├── generator.py
+        └── requirements.txt
 └── README.md
 
 ```
@@ -303,3 +311,7 @@ Integrantes:
 * Luiz Fernando Ferreira Cabral
 
 Trabalho desenvolvido em grupo conforme as diretrizes da disciplina.
+
+python3 generate_graphs.py -n 5 -min 500 -max 10000
+
+python3 run_test.py
