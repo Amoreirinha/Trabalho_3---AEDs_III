@@ -94,6 +94,7 @@ Além da implementação, o trabalho inclui:
 ```text
 TRABALHO_3---AEDS_III/
 ├── docs/ 
+    ├── test_info.txt
     └── results.csv
 ├── instance/
     ├── generate_graphs.py
@@ -298,6 +299,309 @@ Para gerar um grafo de Erdős-Rényi com 10 nós e uma probabilidade de 0.5 (50%
 ```Bash
 python3 generator.py erdos 10 0.5
 ```
+---
+## Explicação Detalhada dos Dados no results.csv
+O arquivo results.csv contém 8 colunas com informações sobre os testes realizados nos diferentes tipos de grafos. Abaixo está a explicação detalhada de cada campo:
+
+## Estrutura do CSV
+```csv
+Quantidade_Vertices;Tipo_Grafo;Custo_Dijkstra;Tempo_Dijkstra(s);Custo_Duan;Tempo_Duan(s);Custo_BellmanFord;Tempo_BellmanFord(s)
+```
+### 1. Quantidade_Vertices
+
+| Propriedade |	Descrição |
+|-----------|--------------|
+| O que é | Número de nós (vértices) no grafo| 
+| Tipo | Número inteiro |
+| Intervalo | Definido pelo usuário (ex: 500 a 10000) |
+|Exemplo | 500, 1584, 5011 |
+
+#### Importância:
+
+* Permite analisar como os algoritmos escalam com o aumento do grafo
+* Quanto mais vértices, maior a complexidade computacional
+* Fundamental para testes de desempenho e complexidade assintótica
+
+### 2. Tipo_Grafo
+|Propriedade	|Descrição|
+|-----------|--------------|
+O que é|	Topologia/estrutura do grafo gerado|
+Tipo|	String (texto)|
+Valores possíveis|	erdos, watts, barabasi, complete, regular|
+Exemplo	|erdos, barabasi|
+
+#### Características de cada tipo:
+
+|Tipo	|Descrição	|Densidade	|Aplicação típica|
+|-----------|--------------|--------------|--------------|
+erdos|	Erdős-Rényi - arestas com probabilidade p	|Controlada por p	|Redes aleatórias|
+watts|	Watts-Strogatz - mundo pequeno	|Moderada|	Redes sociais|
+barabasi|	Barabási-Albert - livre de escala	|Baixa a moderada	|Internet, redes biológicas|
+complete	|Grafo completo - todos conectados	|Máxima (denso)	|Teste de pior caso|
+regular|	Grafo regular - todos mesmo grau	|Constante	|Redes estruturadas|
+
+#### Importância:
+
+* Diferentes topologias afetam o desempenho dos algoritmos
+* Permite comparar eficiência em diferentes estruturas de grafo
+
+### 3. Custo_Dijkstra
+|Propriedade	|Descrição|
+|--------------|--------------|
+O que é	|Soma das distâncias mínimas da origem até todos os vértices|
+Tipo|	Número decimal (float)|
+Unidade	Adimensional |(soma dos pesos das arestas)|
+Intervalo típico|	Depende do grafo (ex: 0 a ~1.000.000)|
+Exemplo	|12345.678901|
+
+#### Cálculo:
+```c
+// O algoritmo Dijkstra calcula a menor distância da origem (0) a cada vértice
+dist[0] = 0;        // Distância para a origem
+dist[1] = 10;       // Menor caminho para vértice 1
+dist[2] = 5;        // Menor caminho para vértice 2
+dist[3] = 8;        // Menor caminho para vértice 3
+
+// Custo total = soma de todas as distâncias
+custo_total = 0 + 10 + 5 + 8 = 23
+```
+#### Importância:
+
+* Validação: Deve ser IDÊNTICO ao Custo_Duan e Custo_BellmanFord
+* Se diferente, indica erro na implementação do algoritmo
+* Permite verificar se os caminhos mínimos estão corretos
+
+### 4. Tempo_Dijkstra(s)
+|Propriedade	|Descrição|
+|--------------|--------------|
+O que é	|Tempo de execução do algoritmo de Dijkstra|
+Tipo|	Número decimal (float)|
+Unidade	|Segundos|
+Intervalo típico|	0.000001 a vários segundos|
+Exemplo|	0.002345 (2.345 milissegundos)|
+
+#### Complexidade Teórica:
+```text
+Dijkstra com matriz de adjacência: O(V²)
+Onde V = número de vértices
+```
+Fatores que afetam o tempo:
+* Número de vértices (maior impacto)
+* Densidade do grafo (matriz cheia vs esparsa)
+* Implementação (array simples vs heap)
+
+#### Importância:
+
+* Mede a eficiência da implementação com matriz de adjacência
+* Útil para verificar a complexidade O(V²) na prática
+
+#### 5. Custo_Duan
+|Propriedade	|Descrição|
+|--------------|--------------|
+O que é	|Soma das distâncias mínimas (MESMO valor do Dijkstra)
+Tipo	|Número decimal (float)
+Unidade	|Adimensional
+Exemplo	|12345.678901 (deve ser igual ao Dijkstra)
+
+#### Importância:
+
+* Validação cruzada: Deve ser EXATAMENTE igual ao Custo_Dijkstra
+* Confirma que o algoritmo de Duan (heap) está correto
+* Diferenças indicam bugs na implementação
+
+### 6. Tempo_Duan(s)
+|Propriedade|	Descrição|
+|--------------|--------------|
+O que é	|Tempo de execução do algoritmo de Duan (versão otimizada)
+Tipo	|Número decimal (float)
+Unidade	|Segundos
+Exemplo	|0.001234 (1.234 milissegundos)
+
+#### Complexidade Teórica:
+```text
+Duan com heap mínimo: O((V + E) log V)
+Onde:
+  V = número de vértices
+  E = número de arestas
+Comparação com Dijkstra:
+
+Para grafos esparsos (E ≈ V): Duan é MAIS RÁPIDO que Dijkstra O(V²)
+
+Para grafos densos (E ≈ V²): Dijkstra pode ser competitivo
+```
+#### Importância:
+
+* Avalia a eficiência da implementação com heap
+* Deve ser mais rápido que Dijkstra em grafos esparsos
+* Testa a melhoria da complexidade de O(V²) para O((V+E) log V)
+
+### 7. Custo_BellmanFord
+|Propriedade	|Descrição|
+|--------------|--------------|
+O que é	|Soma das distâncias mínimas (MESMO valor dos outros)
+Tipo	|Número decimal (float)
+Unidade	|Adimensional
+Exemplo	|12345.678901 (deve ser igual aos outros)
+
+#### Importância:
+
+* Terceira validação: Confirma consistência entre os três algoritmos
+* Bellman-Ford é mais geral (aceita pesos negativos)
+* Serve como referência para verificar os outros dois
+
+### 8. Tempo_BellmanFord(s)
+Propriedade	|Descrição
+|--------------|--------------|
+O que é	|Tempo de execução do algoritmo de Bellman-Ford
+Tipo	|Número decimal (float)
+Unidade	|Segundos
+Exemplo|	0.123456 (123.456 milissegundos)
+
+#### Complexidade Teórica:
+```text
+Bellman-Ford: O(V × E)
+Onde:
+  V = número de vértices
+  E = número de arestas
+Características:
+
+MAIS LENTO que Dijkstra e Duan para grafos sem pesos negativos
+
+Pode detectar ciclos de peso negativo
+
+Complexidade cúbica em grafos densos: O(V³)
+```
+
+#### Importância:
+
+* Serve como baseline para comparar eficiência
+* Demonstra na prática porque Dijkstra/Duan são preferíveis
+* Útil para entender a diferença de complexidade
+
+---
+
+## Relatório Técnico dos Testes de Algoritmos de Caminho Mínimo
+### Visão Geral do Experimento
+Foi realizado um teste extensivo em larga escala para avaliar o desempenho de três algoritmos de caminho mínimo (Dijkstra, Duan e Bellman-Ford) em diferentes topologias de grafos. O experimento envolveu a geração e execução de 10.000 instâncias de grafos, totalizando 213.7 GB de dados processados.
+
+### Configuração do Teste
+#### Parâmetros do Experimento
+* Total de instâncias: 10.000 grafos
+* Distribuição: 2.000 grafos de cada tipo (5 tipos)
+* Variação de vértices: 500 a 10.000 por grafo
+* Tamanho total dos dados: 213.7 GB
+* Tempo total de processamento: ~8 horas (6h geração + 2h testes)
+
+#### Tipos de Grafos Testados
+Tipo|	Quantidade	|Característica
+|--------------|--------------|--------------|
+Erdős-Rényi|	2.000	|Grafos aleatórios com probabilidade fixa
+Watts-Strogatz	|2.000	|Grafos de "mundo pequeno"
+Barabási-Albert	|2.000|	Grafos livres de escala
+Completo	|2.000|	Grafos densos (todos conectados)
+Regular	|2.000	|Grafos com grau uniforme
+
+#### Hardware Utilizado
+ Componente	|Modelo/Especificação	|Impacto nos Testes|
+|--------------|--------------|--------------|
+Placa Mãe	|B550M Aorus Elite	|Suporte PCIe 4.0, boa largura de banda
+CPU|	AMD Ryzen 7 5700X|	8 núcleos / 16 threads @ 4.67 GHz
+GPU|	RX 6600 XT (12GB)|	Não utilizada (processamento CPU-bound)
+RAM	|64 GB DDR4 @ 3200 MHz	|Essencial para processar grafos grandes
+Armazenamento	|1 TB SSD SATA|	Leitura/escrita rápida dos 213.7 GB
+Sistema	|Ubuntu 24.04 (kernel 6.17)|	Ambiente otimizado para desenvolvimento
+
+### Análise do Hardware para o Teste
+1. CPU Ryzen 7 5700X: Ideal para processamento paralelo (8 núcleos/16 threads). Algoritmos de caminho mínimo são CPU-bound, beneficiando-se da alta frequência (4.67 GHz).
+2. 64 GB RAM: Fundamental para manipular múltiplos grafos grandes. Um grafo com 10.000 vértices pode ocupar ~400 MB em memória (matriz de adjacência 10.000×10.000).
+3. SSD 1TB: Essencial para ler 213.7 GB de dados em ~2 horas (taxa média de ~30 MB/s por arquivo).
+
+### Tempos de Processamento
+#### Geração das Instâncias: ~6 horas
+```text
+Processo de geração:
+├── Criar 2.000 grafos/tipo × 5 tipos = 10.000 arquivos
+├── Para cada grafo: gerar topologia, arestas e pesos
+├── Salvar 10.000 arquivos totalizando 213.7 GB
+└── Velocidade média: ~35.6 GB/hora ou ~10 MB/s
+Fatores que influenciaram a geração:
+
+Complexidade de geração de cada topologia
+
+Garantia de conectividade dos grafos
+
+Escrita no SSD de arquivos grandes
+```
+
+#### Execução dos Testes: ~2 horas
+```text
+Processamento dos algoritmos:
+├── 10.000 execuções completas (3 algoritmos por execução)
+├── Leitura de 213.7 GB de dados
+├── Processamento de ~30.000 algoritmos (10k × 3)
+└── Velocidade média: ~106.8 GB/hora (~30 MB/s)
+Tempo por operação:
+
+Leitura do grafo do disco
+
+Execução Dijkstra: O(V²)
+
+Execução Duan: O((V+E) log V)
+
+Execução Bellman-Ford: O(V×E)
+
+Escrita dos resultados
+```
+
+### Análise de Performance por Algoritmo
+#### Complexidades Teóricas vs. Práticas
+|Algoritmo	|Complexidade	|Tempo esperado (V=10.000) | Comportamento observado|
+|--------------|--------------|--------------|--------------|
+Dijkstra 	|O(V²)	|~100 milhões de operações|	Melhor em grafos densos
+Duan (Heap)	|O((V+E) log V)	|~200 mil operações (esparso)|	Melhor em grafos esparsos
+Bellman-Ford	|O(V×E)	|~1 bilhão de operações (denso)	|Mais lento, usado como validação
+
+### Distribuição de Tempo por Tipo de Grafo
+Espera-se que o desempenho varie significativamente por tipo:
+
+```text
+Grafos Completos (densos):
+├── Dijkstra: Mais rápido (operações previsíveis)
+├── Duan: Penalizado pelo heap (overhead)
+└── Bellman-Ford: Extremamente lento (O(V³))
+
+Grafos Erdős-Rényi (esparsos, p baixo):
+├── Dijkstra: Penalizado por O(V²)
+├── Duan: Muito mais rápido (O(E log V))
+└── Bellman-Ford: Lento, mas menos que completos
+
+Grafos Watts-Strogatz (mundo pequeno):
+├── Balanceado: densidade média
+├── Duan geralmente melhor que Dijkstra
+└── Bellman-Ford: significativamente mais lento
+
+Grafos Barabási-Albert (livres de escala):
+├── Estrutura hierárquica
+├── Duan se destaca pela esparsidade
+└── Bellman-Ford: tempo proporcional a V × E
+
+Grafos Regulares:
+├── Grau constante: E = (n × d)/2
+├── Comportamento linear com o número de vértices
+└── Duan: melhor desempenho geral
+```
+
+### Métricas Importantes Obtidas
+#### Capacidade de Processamento
+* Grafos por segundo: ~1.39 grafos/segundo (10.000/7200s)
+* Dados processados por segundo: ~30.4 MB/s
+* Operações de CPU: Bilhões de operações de relaxamento
+
+#### Eficiência do Hardware
+* Uso de CPU: 100% durante processamento (multi-thread)
+* Uso de RAM: Pico de ~32-48 GB
+* Uso de SSD: Leitura constante ~200-300 MB/s
+
 ---
 
 # 👥 Grupo
