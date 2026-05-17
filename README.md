@@ -604,23 +604,6 @@ Grafos Regulares:
 
 ---
 
-# 👥 Grupo
-
-Integrantes:
-
-* Joaquim Pedro do Nascimento Moreira de Jesus
-* Victória Almeida Tambasco
-* Murilo Antonio da Silva
-* Luiz Gabriel da Silva Cabrera
-* Luiz Fernando Ferreira Cabral
-
-Trabalho desenvolvido em grupo conforme as diretrizes da disciplina.
-
----
-
-<<<<<<< HEAD
-python3 run_test.py
-=======
 # 🛠️Execução dos Automática dos Testes
 ```Bash
 python3 generate_graphs.py -n 5 -min 500 -max 10000
@@ -668,4 +651,19 @@ O script:
 * Calcula os custos mínimos encontrados
 
 * Salva os resultados para análise comparativa
->>>>>>> 58ade453556bd563d53040e2ab0eab9b47f09279
+
+---
+
+# 👥 Grupo
+
+Integrantes:
+
+* Joaquim Pedro do Nascimento Moreira de Jesus
+* Victória Almeida Tambasco
+* Murilo Antonio da Silva
+* Luiz Gabriel da Silva Cabrera
+* Luiz Fernando Ferreira Cabral
+
+Trabalho desenvolvido em grupo conforme as diretrizes da disciplina.
+
+---
