@@ -312,6 +312,52 @@ Integrantes:
 
 Trabalho desenvolvido em grupo conforme as diretrizes da disciplina.
 
-python3 generate_graphs.py -n 5 -min 500 -max 10000
+---
 
+# 🛠️Execução dos Automática dos Testes
+```Bash
+python3 generate_graphs.py -n 5 -min 500 -max 10000
+```
+O que esse comando faz?
+
+Esse comando executa o script generate_graphs.py, responsável por criar automaticamente arquivos de grafos para os testes dos algoritmos.
+
+Parâmetros utilizados
+* python3
+
+ Executa o interpretador Python 3
+* generate_graphs.py
+
+ Script responsável pela geração automática dos grafos
+* -n 5
+
+ Define a quantidade de grafos que serão gerados
+
+Resultado
+
+O script cria automaticamente instâncias de grafos com diferentes tamanhos e topologias para serem utilizadas nos testes de desempenho dos algoritmos de caminho mínimo.
+
+# 🛠️Executar os Testes
+```Bash
 python3 run_test.py
+```
+O que esse comando faz?
+
+Esse comando executa o script run_test.py, responsável por automatizar os testes dos algoritmos implementados.
+
+Funcionamento
+
+O script:
+
+* Lê os grafos gerados anteriormente
+
+* Executa os algoritmos:
+  * Dijkstra
+  * Duan
+  * Bellman-Ford
+
+* Mede o tempo de execução de cada algoritmo
+
+* Calcula os custos mínimos encontrados
+
+* Salva os resultados para análise comparativa
